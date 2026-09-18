@@ -1,4 +1,6 @@
-export type CatalogKind = 'food' | 'beauty';
+import { PlainSummary } from './plain-language';
+
+export type CatalogKind = 'food' | 'beauty' | 'pharma';
 
 export interface CatalogProduct {
   kind: CatalogKind;
@@ -19,6 +21,8 @@ export interface CatalogProduct {
   nutriments: Record<string, number>;
   dataSource: string;
   dataSourceUrl: string;
+  /** Plain-language summary built at import time — no jargon. */
+  humanReadableSummary?: PlainSummary;
   raw: Record<string, unknown>;
 }
 

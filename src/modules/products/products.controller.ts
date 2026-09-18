@@ -17,13 +17,18 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { QueryProductDto } from './dto/query-product.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { ApiResponseDto } from '../../common/dto/api-response.dto';
+import { UsersService } from '../users/users.service';
 
 @ApiTags('Products')
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'List / search products with pagination' })
@@ -34,16 +39,29 @@ export class ProductsController {
   }
 
   @Get('barcode/:barcode')
+  @UseGuards(OptionalJwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Look up a product by barcode (scan flow)',
     description:
-      'Checks the local catalog first, then Open Food Facts / Open Beauty Facts (free, no API key) and caches the result.',
+      'Returns the full scan result: product info, health score (A-F grade), ' +
+      'plain-language summary, allergens, good-for/avoid-if lists. ' +
+      'Automatically records scan history when called with a valid Bearer token.',
   })
-  @ApiParam({ name: 'barcode', example: '012345678901' })
+  @ApiParam({ name: 'barcode', example: '8901030862013' })
   @ApiResponse({ status: 200, type: ApiResponseDto })
   @ApiResponse({ status: 404, description: 'No product found for this barcode' })
-  async findByBarcode(@Param('barcode') barcode: string) {
-    const data = await this.productsService.findByBarcode(barcode);
+  async findByBarcode(
+    @Param('barcode') barcode: string,
+    @CurrentUser() currentUser?: { userId: string },
+  ) {
+    const data = await this.productsService.scanByBarcode(barcode);
+
+    // Auto-record history — fire-and-forget, never delays the response
+    if (currentUser?.userId) {
+      this.usersService.addToHistory(currentUser.userId, data.productId, barcode).catch(() => {});
+    }
+
     return ApiResponseDto.success(data, 'Product found');
   }
 

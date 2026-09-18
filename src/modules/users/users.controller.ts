@@ -90,16 +90,25 @@ export class UsersController {
   // ─── Scan History ─────────────────────────────────────────────────────────
 
   @Get('me/history')
-  @ApiOperation({ summary: 'Get scan history' })
+  @ApiOperation({ summary: 'Get scan history (newest scan first)' })
   @ApiResponse({ status: 200, type: ApiResponseDto })
   async getHistory(@CurrentUser('userId') userId: string) {
     const data = await this.usersService.getScanHistory(userId);
     return ApiResponseDto.success(data, 'Scan history fetched');
   }
 
+  @Delete('me/history')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Clear entire scan history' })
+  @ApiResponse({ status: 200, type: ApiResponseDto })
+  async clearHistory(@CurrentUser('userId') userId: string) {
+    await this.usersService.clearHistory(userId);
+    return ApiResponseDto.success(null, 'Scan history cleared');
+  }
+
   @Delete('me/history/:productId')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Remove a product from scan history' })
+  @ApiOperation({ summary: 'Remove a specific product from scan history' })
   @ApiParam({ name: 'productId', description: 'Product UUID' })
   @ApiResponse({ status: 200, type: ApiResponseDto })
   async removeHistory(

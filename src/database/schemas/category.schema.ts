@@ -9,6 +9,7 @@ export enum CategoryType {
   FOOD = 'food',
   SKINCARE = 'skincare',
   SUPPLEMENTS = 'supplements',
+  PHARMA = 'pharma',
 }
 
 @Schema({ timestamps: true, collection: 'categories' })
