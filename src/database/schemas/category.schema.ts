@@ -22,7 +22,7 @@ export class Category {
   name: string;
 
   @ApiProperty({ example: 'greek-yogurt' })
-  @Prop({ required: true, unique: true, trim: true, lowercase: true })
+  @Prop({ required: true, trim: true, lowercase: true })
   slug: string;
 
   @ApiProperty({ enum: CategoryType })

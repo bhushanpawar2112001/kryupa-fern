@@ -65,7 +65,7 @@ export class Score {
   _id: string;
 
   @ApiProperty({ example: 'product-uuid' })
-  @Prop({ type: String, ref: 'Product', required: true, unique: true })
+  @Prop({ type: String, ref: 'Product', required: true })
   productId: string;
 
   @ApiProperty({ example: 82 })

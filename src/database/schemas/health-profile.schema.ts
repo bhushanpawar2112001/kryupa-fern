@@ -32,7 +32,7 @@ export class HealthProfile {
   _id: string;
 
   @ApiProperty({ example: 'user-uuid' })
-  @Prop({ type: String, ref: 'User', required: true, unique: true })
+  @Prop({ type: String, ref: 'User', required: true })
   userId: string;
 
   @ApiProperty({ example: ['peanuts', 'tree nuts'] })

@@ -25,11 +25,11 @@ export class User {
   _id: string;
 
   @ApiPropertyOptional({ example: 'user@example.com' })
-  @Prop({ trim: true, lowercase: true, sparse: true })
+  @Prop({ trim: true, lowercase: true })
   email: string;
 
   @ApiPropertyOptional({ example: '+1234567890' })
-  @Prop({ sparse: true })
+  @Prop()
   phone: string;
 
   @Prop({ select: false })

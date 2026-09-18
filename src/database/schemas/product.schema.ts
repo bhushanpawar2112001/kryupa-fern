@@ -46,7 +46,7 @@ export class Product {
   categoryId: string;
 
   @ApiPropertyOptional({ example: '012345678901' })
-  @Prop({ sparse: true, trim: true })
+  @Prop({ trim: true })
   barcode: string;
 
   @ApiProperty({ example: ['https://cdn.vero.app/products/abc.jpg'] })
