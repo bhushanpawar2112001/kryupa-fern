@@ -18,6 +18,7 @@ import { SubscriptionsModule } from './modules/subscriptions/subscriptions.modul
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { DataCorrectionsModule } from './modules/data-corrections/data-corrections.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { LegalModule } from './modules/legal/legal.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { AdminModule } from './modules/admin/admin.module';
     NotificationsModule,
     DataCorrectionsModule,
     AdminModule,
+    LegalModule,
   ],
   providers: [RedisService],
   exports: [RedisService],

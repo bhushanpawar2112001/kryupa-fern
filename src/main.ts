@@ -12,8 +12,10 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port    = configService.get<number>('PORT', 3000);
 
-  // Global prefix
-  app.setGlobalPrefix('api/v1');
+  // Global prefix — exclude legal pages so /privacy and /terms are accessible at root
+  app.setGlobalPrefix('api/v1', {
+    exclude: ['privacy', 'terms'],
+  });
 
   // Global pipes
   // whitelist: strip unknown fields silently
